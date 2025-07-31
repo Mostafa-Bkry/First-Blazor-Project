@@ -1,0 +1,30 @@
+﻿@page "/ProductDetails/{id:int}"
+@inject IProductService ProductsServices
+
+<div class="row align-content-center">
+    <div class="col-4"></div>
+    <div class="col-8">
+        <div class="card" style="width: 18rem;">
+            <img src="/sample-data/images/@Product.Image" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@Product.Name</h5>
+                <p class="card-text">@Product.Description.</p>
+                <p class="card-text">Price: @Product.Price</p>
+                <a class="btn btn-warning" href="/Products">All Products</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Product Product { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        Product = ProductsServices?.GetByID(Id) ?? new Product();
+        base.OnInitialized();
+    }
+}
