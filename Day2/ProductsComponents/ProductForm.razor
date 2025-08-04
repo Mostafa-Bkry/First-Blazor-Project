@@ -1,5 +1,6 @@
 ﻿@page "/ProductForm/{id:int}&{IsNew:bool}"
 @inject IProductService ProductsServices
+@inject ICategoryService CategoryServices
 @inject NavigationManager Navigation
 
 <div class="container">
@@ -40,6 +41,20 @@
                     <span class="text-danger"></span>
                 </div>
                 <div class="from-group mt-4">
+                    <label>Product Image</label>
+                    <InputSelect class="form-control" @bind-Value="Product.CatgID" placeholder="Product Category">
+                        @if (IsNew)
+                        {
+                            <option disabled value="0">Choose Category</option>
+                        }
+                        @foreach (Category category in Categories)
+                        {
+                            <option value="@category.ID">@category.Name</option>
+                        }
+                    </InputSelect>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="from-group mt-4">
                     <a class="btn btn-info" href="Products">Back</a>
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
@@ -48,26 +63,3 @@
         <div class="col-2"></div>
     </div>
 </div>
-
-@code {
-    [Parameter]
-    public int Id { get; set; }
-
-    [Parameter]
-    public bool IsNew { get; set; } = true;
-
-    public Product Product { get; set; } = new();
-
-    protected override void OnInitialized()
-    {
-        if (Id > 0)
-            Product = ProductsServices?.GetByID(Id) ?? new Product();
-        base.OnInitialized();
-    }
-
-    void Save()
-    {
-        ProductsServices.Save(Product, IsNew);
-        Navigation.NavigateTo($"ProductForm/{Product.ID}&false");
-    }
-}

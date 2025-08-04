@@ -4,6 +4,7 @@ namespace Day2.Services
     public class CategoryService : ICategoryService
     {
         List<Category> _categories;
+        int newCategoryID;
 
         public CategoryService()
         {
@@ -24,7 +25,32 @@ namespace Day2.Services
 
         public void Save(Category newCategory, bool isNew)
         {
-            throw new NotImplementedException();
+            if (newCategory is not null)
+            {
+                if (isNew)
+                {
+                    newCategory.ID = newCategoryID;
+                    _categories.Add(newCategory);
+                }
+                else
+                {
+                    Category? oldCategory = _categories.SingleOrDefault(p => p.ID == newCategory.ID);
+
+                    if (oldCategory != null)
+                        oldCategory.Name = newCategory.Name;
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            Category? existingCategory = _categories?.Find(p => p.ID == id);
+
+            if (existingCategory is null)
+                existingCategory = _categories?.SingleOrDefault(p => p.ID == id);
+
+            if (existingCategory is not null)
+                _categories?.Remove(existingCategory);
         }
     }
 }

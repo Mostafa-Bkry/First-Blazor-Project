@@ -6,5 +6,6 @@
         IEnumerable<Category>? GetAll();
 
         void Save(Category newCategory, bool isNew);
+        void Delete(int id);
     }
 }

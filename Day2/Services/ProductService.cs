@@ -63,5 +63,16 @@
                 }
             }
         }
+
+        public void Delete(int id)
+        {
+            Product? existingProduct = _products?.Find(p => p.ID == id);
+
+            if (existingProduct is null)
+                existingProduct = _products?.SingleOrDefault(p => p.ID == id);
+
+            if(existingProduct is not null)
+                _products?.Remove(existingProduct);
+        }
     }
 }

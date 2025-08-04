@@ -8,5 +8,6 @@
         IEnumerable<Product>? GetAll();
 
         void Save(Product newProduct, bool isNew);
+        void Delete(int id);
     }
 }
