@@ -4,62 +4,74 @@
 @inject NavigationManager Navigation
 
 <div class="container">
-    <div class="row text-center">
-        <div>
-            @if(IsNew)
-            {
-                <h5>Add New Product</h5>
-            }
-            else
-            {
-                <h5>Edit Product</h5>
-            }
+    @if (Product is null && !IsNew)
+    {
+        <div class="text-center">
+            <h1>Can't Find this Product !!!</h1>
+            <a class="btn btn-secondary" href="/Products">All Products</a>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-2"></div>
-        <div class="col">
-            <EditForm Model="Product" OnSubmit="Save">
-                <div class="from-group mt-4">
-                    <label>Product Name</label>
-                    <InputText class="form-control" @bind-Value="Product.Name" placeholder="Product Name"></InputText>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="from-group mt-4">
-                    <label>Product Description</label>
-                    <InputText class="form-control" @bind-Value="Product.Description" placeholder="Product Description"></InputText>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="from-group mt-4">
-                    <label>Product Price</label>
-                    <InputNumber class="form-control" @bind-Value="Product.Price" placeholder="Product Price"></InputNumber>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="from-group mt-4">
-                    <label>Product Image</label>
-                    <InputText class="form-control" @bind-Value="Product.Image" placeholder="Product Image"></InputText>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="from-group mt-4">
-                    <label>Product Image</label>
-                    <InputSelect class="form-control" @bind-Value="Product.CatgID" placeholder="Product Category">
-                        @if (IsNew)
-                        {
-                            <option disabled value="0">Choose Category</option>
-                        }
-                        @foreach (Category category in Categories)
-                        {
-                            <option value="@category.ID">@category.Name</option>
-                        }
-                    </InputSelect>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="from-group mt-4">
-                    <a class="btn btn-info" href="Products">Back</a>
-                    <button type="submit" class="btn btn-success">Save</button>
-                </div>
-            </EditForm>
+    }
+    else
+    {
+        <div class="row text-center">
+            <div>
+                @if (IsNew)
+                {
+                    <h5>Add New Product</h5>
+                }
+                else
+                {
+                    <h5>Edit Product</h5>
+                }
+            </div>
         </div>
-        <div class="col-2"></div>
-    </div>
+        <div class="row mt-4">
+            <div class="col-2"></div>
+            <div class="col">
+                <EditForm Model="Product" OnValidSubmit="Save">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="from-group mt-4">
+                        <label>Product Name</label>
+                        <InputText class="form-control" @bind-Value="Product!.Name" placeholder="Product Name"></InputText>
+                        <ValidationMessage class="text-danger" For="() => Product.Name"></ValidationMessage>
+                    </div>
+                    <div class="from-group mt-4">
+                        <label>Product Description</label>
+                        <InputText class="form-control" @bind-Value="Product.Description" placeholder="Product Description"></InputText>
+                        <ValidationMessage class="text-danger" For="@(() => Product.Description)"></ValidationMessage>
+                    </div>
+                    <div class="from-group mt-4">
+                        <label>Product Price</label>
+                        <InputNumber class="form-control" @bind-Value="Product.Price" placeholder="Product Price"></InputNumber>
+                        <ValidationMessage class="text-danger" For="() => Product.Price"></ValidationMessage>
+                    </div>
+                    <div class="from-group mt-4">
+                        <label>Product Image</label>
+                        <InputText class="form-control" @bind-Value="Product.Image" placeholder="Product Image"></InputText>
+                        <ValidationMessage class="text-danger" For="() => Product.Image"></ValidationMessage>
+                    </div>
+                    <div class="from-group mt-4">
+                        <label>Product Image</label>
+                        <InputSelect class="form-control" @bind-Value="Product.CatgID" placeholder="Product Category">
+                            @if (IsNew)
+                            {
+                                <option disabled value="0">Choose Category</option>
+                            }
+                            @foreach (Category category in Categories)
+                            {
+                                <option value="@category.ID">@category.Name</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage class="text-danger" For="() => Product.CatgID"></ValidationMessage>
+                    </div>
+                    <div class="from-group mt-4">
+                        <a class="btn btn-info" href="Products">Back</a>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    }
 </div>

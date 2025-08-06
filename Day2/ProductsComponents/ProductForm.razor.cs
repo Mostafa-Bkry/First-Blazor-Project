@@ -10,14 +10,20 @@ namespace Day2.ProductsComponents
         [Parameter]
         public bool IsNew { get; set; } = true;
 
-        public Product Product { get; set; } = new();
+        public Product? Product { get; set; }
 
         public List<Category> Categories { get; set; } = new List<Category>();
 
         protected override void OnInitialized()
         {
-            if (Id > 0)
-                Product = ProductsServices?.GetByID(Id) ?? new Product();
+            //if (Id > 0)
+            //    Product = ProductsServices?.GetByID(Id) ?? (IsNew ? new Product() : null);
+
+            if (Id > 0 && IsNew)
+                Product = new Product();
+
+            if(Id > 0 && !IsNew)
+                Product = ProductsServices?.GetByID(Id);
 
             Categories = CategoryServices?.GetAll()?.ToList() ?? new List<Category>();
 
@@ -26,8 +32,16 @@ namespace Day2.ProductsComponents
 
         void Save()
         {
-            ProductsServices.Save(Product, IsNew);
-            Navigation.NavigateTo($"ProductForm/{Product.ID}&false");
+            int id = ProductsServices.GetNextNewProductID();
+            if (Product is not null)
+            {
+                Product.ID = id;
+                ProductsServices.Save(Product, IsNew);
+                Navigation.NavigateTo($"ProductForm/{Product.ID}&false");
+                return;
+            }
+
+            Navigation.NavigateTo($"ProductForm/{id}&false");
         }
     }
 }

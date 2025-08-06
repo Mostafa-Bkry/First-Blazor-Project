@@ -38,7 +38,7 @@
             return newProductID;
         }
 
-        public void Save(Product newProduct, bool isNew)
+        public void Save(Product? newProduct, bool isNew)
         {
             if (newProduct is not null)
             {
